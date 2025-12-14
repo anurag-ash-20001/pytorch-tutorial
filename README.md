@@ -69,12 +69,9 @@ Windows & Linux (CUDA 12.1 – Recommended)
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 ```
 This installs:
-
-    PyTorch with CUDA support
-
-    torchvision
-
-    torchaudio
+PyTorch with CUDA support    
+torchvision
+torchaudio
 
 ✅ Verify GPU Installation
 
@@ -83,24 +80,25 @@ Run Python:
 python
 
 Then execute:
-
+```
 import torch
 
 print("PyTorch version:", torch.__version__)
 print("CUDA available:", torch.cuda.is_available())
 print("GPU:", torch.cuda.get_device_name(0))
+```
 
 Expected Output
-
+```
 PyTorch version: 2.x.x+cu121
 CUDA available: True
 GPU: NVIDIA GeForce RTX 4060
-
+```
 If CUDA available is True, your GPU is working correctly 🚀
 🧪 Test Script (GPU Matrix Multiplication)
 
 Create a file called test_gpu.py:
-
+```
 import torch
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -111,21 +109,16 @@ y = torch.rand(1000, 1000, device=device)
 
 z = x @ y
 print("Matrix multiplication completed on", device)
-
+```
 Run it:
-
+```
 python test_gpu.py
-
+```
 🧠 VS Code Setup (Important)
-
-    Open Command Palette: Ctrl + Shift + P
-
-    Select Python: Select Interpreter
-
-    Choose:
-
+ Open Command Palette: Ctrl + Shift + P
+ Select Python: Select Interpreter
+ Choose:
         Windows: venv\Scripts\python.exe
-
         Linux: venv/bin/python
 
 This ensures VS Code uses the CUDA-enabled PyTorch.
@@ -135,38 +128,28 @@ Torch not compiled with CUDA enabled
 Cause: CPU-only PyTorch installed
 
 Fix:
-
+```
 pip uninstall torch torchvision torchaudio -y
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 
 torch.cuda.is_available() returns False
-
-    Ensure NVIDIA driver is installed
-
-    Ensure correct Python interpreter is selected
-
-    Ensure CUDA-enabled PyTorch is installed
-
-    Ensure virtual environment is activated
+```
+Ensure NVIDIA driver is installed
+Ensure correct Python interpreter is selected
+Ensure CUDA-enabled PyTorch is installed
+Ensure virtual environment is activated
 
 📌 Notes
+RTX 4060 works best with CUDA 12.x
+No need to install CUDA Toolkit manually
+Always use a virtual environment
 
-    RTX 4060 works best with CUDA 12.x
-
-    No need to install CUDA Toolkit manually
-
-    Always use a virtual environment
-
-    Works on both Windows and Linux
+Works on both Windows and Linux
 
 🎯 Next Steps
-
-    Train neural networks on GPU
-
-    Benchmark CPU vs GPU performance
-
-    Run deep learning models (CNNs, Transformers)
+Train neural networks on GPU
+Benchmark CPU vs GPU performance
+Run deep learning models (CNNs, Transformers)
 
 📜 License
-
 MIT License
