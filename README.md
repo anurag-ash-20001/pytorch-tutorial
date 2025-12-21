@@ -1,31 +1,55 @@
-#  data parallelism Implementation
+# Distributed Data Parallelism (DDP) – Single GPU & CPU Demo
 
-# Single-GPU Data Parallelism with PyTorch DistributedDataParallel (DDP)
+This repository demonstrates **classic data parallelism** using **PyTorch DistributedDataParallel (DDP)**.
 
-This repository demonstrates **classic data parallelism** using **PyTorch DistributedDataParallel (DDP)** in a **single-GPU environment**, where **two processes target the same GPU**.
-
-The goal of this project is **not performance**, but to **show the data-parallel training pattern in code** and to **explicitly demonstrate why running multiple DDP processes on the same GPU provides no real speedup**.
+The goal is to **show how data parallelism works in code**, not to achieve speedup.
 
 ---
 
-## 🚀 What This Project Demonstrates
+## What is shown
 
-- How **DistributedDataParallel (DDP)** works internally
-- How **data parallelism is achieved** (same model, different data)
-- Why **2 processes on 1 GPU is inefficient**
-- How **gradient synchronization keeps models identical**
-- How this setup relates to **classic data parallelism** discussed in research papers such as **ZeRO-Infinity**
-
-## 🧠 Model Used
-
-A **basic Transformer encoder** is used to keep the focus on distributed training mechanics rather than model complexity.
-
-- Linear embedding
-- One Transformer encoder layer
-- Mean pooling
-- Final linear output layer
+- **2 processes on the same GPU** using `torchrun`
+- **2 CPU processes** using `torch.multiprocessing.spawn`
+- Full model replication on each process
+- Dataset sharding using `DistributedSampler`
+- Gradient synchronization using all-reduce
 
 ---
+
+## How data parallelism works
+
+1. Multiple processes are launched
+2. Each process holds a **full copy of the model**
+3. The dataset is split across processes
+4. Each process computes gradients on different data
+5. Gradients are synchronized, keeping models identical
+
+This is **classic data parallelism**.
+
+---
+
+## Why 2 processes on 1 GPU is useless
+
+- Both processes share the **same GPU**
+- GPU computation is **serialized**
+- Gradient synchronization adds overhead
+- Result: **no real speedup**
+
+DDP guarantees **correctness**, not performance.
+
+---
+
+## Key takeaway
+
+> Data parallelism works correctly, but speedup only happens when each process runs on a different GPU.
+
+---
+
+## Note on ZeRO-Infinity
+
+ZeRO-Infinity is **not implemented** here.  
+It is referenced only to understand the **memory and scalability limits** of standard data parallelism demonstrated in this project.
+
 
 ## ▶️ How to Run
 
