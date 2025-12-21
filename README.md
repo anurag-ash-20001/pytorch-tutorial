@@ -1,8 +1,4 @@
-#  data parallelism Implementation + ZERO infinty(theory)
-
-## Part A: Read the paper “ZeRO‑Infinity: Breaking the GPU Memory Wall for Extreme Scale Deep Learning”
-## https://arxiv.org/pdf/2104.07857 
-## https://arxiv.org/abs/1910.02054v3
+#  data parallelism Implementation
 
 # Single-GPU Data Parallelism with PyTorch DistributedDataParallel (DDP)
 
@@ -19,13 +15,6 @@ The goal of this project is **not performance**, but to **show the data-parallel
 - Why **2 processes on 1 GPU is inefficient**
 - How **gradient synchronization keeps models identical**
 - How this setup relates to **classic data parallelism** discussed in research papers such as **ZeRO-Infinity**
-
----
-
-## 📁 Files
-
-
----
 
 ## 🧠 Model Used
 
