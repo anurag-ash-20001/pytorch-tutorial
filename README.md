@@ -1,155 +1,47 @@
-# 🚀 PyTorch GPU Setup Guide (RTX 4060 – Windows & Linux)
+#  data parallelism Implementation + ZERO infinty(theory)
 
-This repository provides **complete step-by-step instructions** to install **PyTorch with CUDA support** and run it using an **NVIDIA RTX 4060 GPU** on **Windows** and **Linux**.
+## Part A: Read the paper “ZeRO‑Infinity: Breaking the GPU Memory Wall for Extreme Scale Deep Learning”
+## https://arxiv.org/pdf/2104.07857 
+## https://arxiv.org/abs/1910.02054v3
 
-✅ No manual CUDA Toolkit installation required  
-✅ Fully compatible with RTX 40-series GPUs  
-✅ Beginner-friendly and VS Code ready  
+# Single-GPU Data Parallelism with PyTorch DistributedDataParallel (DDP)
 
----
+This repository demonstrates **classic data parallelism** using **PyTorch DistributedDataParallel (DDP)** in a **single-GPU environment**, where **two processes target the same GPU**.
 
-## 📋 Requirements
-
-### Hardware
-- NVIDIA RTX 4060 (Laptop or Desktop)
-
-### Software
-- Python 3.9 – 3.12
-- NVIDIA GPU Driver (latest recommended)
-- Git (optional)
-- VS Code (recommended)
+The goal of this project is **not performance**, but to **show the data-parallel training pattern in code** and to **explicitly demonstrate why running multiple DDP processes on the same GPU provides no real speedup**.
 
 ---
 
-## 🔍 Verify NVIDIA Driver (Windows & Linux)
+## 🚀 What This Project Demonstrates
 
-Run:
-```bash
-nvidia-smi
-```
+- How **DistributedDataParallel (DDP)** works internally
+- How **data parallelism is achieved** (same model, different data)
+- Why **2 processes on 1 GPU is inefficient**
+- How **gradient synchronization keeps models identical**
+- How this setup relates to **classic data parallelism** discussed in research papers such as **ZeRO-Infinity**
 
-You should see your RTX 4060 listed.
-If not, install or update your NVIDIA driver first.
+---
 
-## 🐍 Create a Virtual Environment (Recommended)
--Windows
+## 📁 Files
 
-```
-python -m venv venv
-venv\Scripts\activate
-```
 
--Linux
+---
 
-```
-python3 -m venv venv
-source venv/bin/activate
-```
+## 🧠 Model Used
 
-You should see (venv) in your terminal.
-📦 Upgrade pip
+A **basic Transformer encoder** is used to keep the focus on distributed training mechanics rather than model complexity.
 
-```
-python -m pip install --upgrade pip
-```
+- Linear embedding
+- One Transformer encoder layer
+- Mean pooling
+- Final linear output layer
 
-##📦 Install Required Dependencies
-Install NumPy
-```
-pip install numpy
-```
+---
 
-##⚡ Install PyTorch with CUDA (RTX 4060 Compatible)
+## ▶️ How to Run
 
-⚠️ IMPORTANT
-Do NOT install CUDA Toolkit manually.
-PyTorch includes its own CUDA runtime.
-Windows & Linux (CUDA 12.1 – Recommended)
-```
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-```
-This installs:
-PyTorch with CUDA support    
-torchvision
-torchaudio
-
-✅ Verify GPU Installation
-
-Run Python:
-
-python
-
-Then execute:
-```
-import torch
-
-print("PyTorch version:", torch.__version__)
-print("CUDA available:", torch.cuda.is_available())
-print("GPU:", torch.cuda.get_device_name(0))
-```
-
-Expected Output
-```
-PyTorch version: 2.x.x+cu121
-CUDA available: True
-GPU: NVIDIA GeForce RTX 4060
-```
-If CUDA available is True, your GPU is working correctly 🚀
-🧪 Test Script (GPU Matrix Multiplication)
-
-Create a file called test_gpu.py:
-```
-import torch
-
-device = "cuda" if torch.cuda.is_available() else "cpu"
-print("Using device:", device)
-
-x = torch.rand(1000, 1000, device=device)
-y = torch.rand(1000, 1000, device=device)
-
-z = x @ y
-print("Matrix multiplication completed on", device)
-```
-Run it:
-```
-python test_gpu.py
-```
-🧠 VS Code Setup (Important)
- Open Command Palette: Ctrl + Shift + P
- Select Python: Select Interpreter
- Choose:
-        Windows: venv\Scripts\python.exe
-        Linux: venv/bin/python
-
-This ensures VS Code uses the CUDA-enabled PyTorch.
-❌ Common Issues & Fixes
-Torch not compiled with CUDA enabled
-
-Cause: CPU-only PyTorch installed
-
-Fix:
-```
-pip uninstall torch torchvision torchaudio -y
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-
-torch.cuda.is_available() returns False
-```
-Ensure NVIDIA driver is installed
-Ensure correct Python interpreter is selected
-Ensure CUDA-enabled PyTorch is installed
-Ensure virtual environment is activated
-
-📌 Notes
-RTX 4060 works best with CUDA 12.x
-No need to install CUDA Toolkit manually
-Always use a virtual environment
-
-Works on both Windows and Linux
-
-🎯 Next Steps
-Train neural networks on GPU
-Benchmark CPU vs GPU performance
-Run deep learning models (CNNs, Transformers)
-
-📜 License
-MIT License
+### 1️⃣ Single-process baseline (1 GPU, 1 process)
+```bash```
+python3 gpu.py
+### 2️⃣ DistributedDataParallel (2 processes, SAME GPU)
+```torchrun --nproc_per_node=2 gpu.py```
