@@ -41,7 +41,6 @@ A **basic Transformer encoder** is used to keep the focus on distributed trainin
 ## ▶️ How to Run
 
 ### 1️⃣ Single-process baseline (1 GPU, 1 process)
-```bash```
-python3 gpu.py
+``` python3 gpu.py```
 ### 2️⃣ DistributedDataParallel (2 processes, SAME GPU)
 ```torchrun --nproc_per_node=2 gpu.py```
